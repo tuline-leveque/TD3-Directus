@@ -52,7 +52,7 @@ services:
       CACHE_STORE: "redis"
       REDIS: "redis://cache:6379"
 
-      ADMIN_EMAIL: "admin"
+      ADMIN_EMAIL: "admin@mail.com"
       ADMIN_PASSWORD: "admin"
 
       PUBLIC_URL: ""
