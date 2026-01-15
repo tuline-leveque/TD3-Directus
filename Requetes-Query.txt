@@ -1,0 +1,185 @@
+MERLIN Clement
+LEVEQUE Tuline
+DWM-1
+
+--------------------------------------------------------------------------------------------------------------------
+1. liste des praticiens en précisant : id, nom, prénom, téléphone, ville
+--------------------------------------------------------------------------------------------------------------------
+query Praticien {
+    Praticien {
+        id
+        nom
+        prenom
+        ville
+        telephone
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+2. Idem, en ajoutant le libellé de la spécialité du praticien
+--------------------------------------------------------------------------------------------------------------------
+query Praticien {
+    Praticien {
+        id
+        nom
+        prenom
+        ville
+        telephone
+	specialite_id {
+            libelle
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+3. Idem, en ajoutant un filtre pour sélectionner les praticiens dont la ville est égale à «Paris»
+(ou une valeur de votre jeu de données)
+--------------------------------------------------------------------------------------------------------------------
+query Praticien {
+    Praticien(filter: { ville: { _eq: "Paris" } }) {
+        id
+        nom
+        prenom
+        ville
+        telephone
+        specialite_id {
+            libelle
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+4. Idem, en ajoutant le nom et la ville de la structure d’appartenance du praticien,
+--------------------------------------------------------------------------------------------------------------------
+query Praticien {
+    praticiens {
+        id
+        nom
+        prenom
+        ville
+        telephone
+        specialite_id {
+            libelle
+        }
+        structure_id {
+            nom
+            ville
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+5. Idem, en ajoutant un filtre pour retenir les emails contenant ".fr"
+--------------------------------------------------------------------------------------------------------------------
+query Praticien {
+    Praticien(filter: { email: { _like: "%.fr" } }) {
+        id
+        nom
+        prenom
+        ville
+        telephone
+        specialite_id {
+            libelle
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+6. lister les praticiens rattachés à une structure dont la ville est "Paris".
+--------------------------------------------------------------------------------------------------------------------
+query Praticien {
+    Praticien(filter: { ville: { _eq: "Paris" } }) {
+        id
+        nom
+        prenom
+        ville
+        telephone
+        specialite_id {
+            libelle
+        }
+        structure_id {
+            nom
+            ville
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+7. Requête retournant une liste de praticiens installés à Paris et une liste de praticiens installés
+à Bourdon-les-Bains ; utiliser des alias.
+--------------------------------------------------------------------------------------------------------------------
+query Praticien {
+    Bourdonnais: Praticien(filter: { ville: { _contains: "Bourdon-les-Bains" } }) {
+            id
+            nom
+            prenom
+            ville
+    },
+    Parisien: Praticien(filter: { ville: { _contains: "Paris" } }) {
+            id
+            nom
+            prenom
+            ville
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+8. Transformer la requête précédente de façon à utiliser un fragment correspondant aux champs
+du résultat.
+--------------------------------------------------------------------------------------------------------------------
+query Praticien {
+    Bourdonnais: Praticien(filter: { ville: { _contains: "Bourdon-les-Bains" } }) {
+        ...champsPraticien
+    },
+    Parisien: Praticien(filter: { ville: { _contains: "Paris" } }) {
+        ...champsPraticien
+    },
+}
+
+fragment champsPraticien on Praticien {
+    id
+    nom
+    prenom
+    ville
+}
+
+--------------------------------------------------------------------------------------------------------------------
+9. Transformer la requête 3 pour utiliser une variable de façon à paramétrer la requête par le
+nom de la ville souhaitée.
+--------------------------------------------------------------------------------------------------------------------
+query praticiens($ville: String){
+    Praticien({ ville: { _contains: $ville }) {
+        id
+        nom
+        prenom
+        ville
+        telephone
+        specialite_id {
+            libelle
+        }
+    }
+}
+
+{
+   "ville" : "Paris"
+}
+
+--------------------------------------------------------------------------------------------------------------------
+10. Liste des structures, en indiquant leur nom et ville, en ajoutant la liste des praticiens
+attachés à chaque structure en indiquant leur nom, prénom, email ainsi que le libellé de leur
+spécialité.
+--------------------------------------------------------------------------------------------------------------------
+query Structure {
+    Structure {
+        nom
+        ville
+        Praticiens {
+            nom
+            prenom
+            email
+            specialite_id {
+                libelle
+            }
+        }
+    }
+}
