@@ -1,0 +1,133 @@
+MERLIN Clement
+LEVEQUE Tuline
+DWM-1
+
+--------------------------------------------------------------------------------------------------------------------
+1. Créer la specialité «cardiologie»
+--------------------------------------------------------------------------------------------------------------------
+mutation Create_Specialite_item {
+    create_Specialite_item(data: { libelle: "Cardiologie" }) {
+        id
+        libelle
+        description
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+2. créer un praticien: nom, prénom, ville, email, téléphone
+--------------------------------------------------------------------------------------------------------------------
+mutation Create_Praticien_item {
+    create_Praticien_item(
+        data: { nom: null, prenom: null, email: null, ville: null, telephone: null }
+    ) {
+        id
+        nom
+        prenom
+        ville
+        email
+        telephone
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+3. modifier le praticien pour le rattacher à la spécialité «cardiologie»
+--------------------------------------------------------------------------------------------------------------------
+mutation Update_Praticien_item {
+    update_Praticien_item(
+        id: "c06e8880-4702-48e0-8e5c-480c363b1c9f"
+        data: { specialite_id: { id: "6" } }
+    ) {
+        specialite_id {
+            id
+            libelle
+            description
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+4. créer un praticien en le rattachant à la spécialité «cardiologie»
+--------------------------------------------------------------------------------------------------------------------
+mutation Create_Praticien_item {
+    create_Praticien_item(
+        data: {
+            nom: "Logue"
+            prenom: "Cardio"
+            email: "cardio@mail.com"
+            ville: "Cardioville"
+            telephone: "0"
+            specialite_id: { id: "6" }
+        }
+    ) {
+        id
+        nom
+        prenom
+        ville
+        email
+        telephone
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+5. créer un praticien et créer en même temps sa spécialité «chirurgie»
+--------------------------------------------------------------------------------------------------------------------
+mutation Create_Praticien_item {
+    create_Praticien_item(
+        data: {
+            nom: "Chiru"
+            prenom: "Gien"
+            specialite_id: { libelle: "Chirurgie", description: "spé chirurgie" }
+        }
+    ) {
+        nom
+        prenom
+        id
+        specialite_id {
+            libelle
+            description
+            id
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+6. ajouter un praticien à la spécialité «chirurgie»
+--------------------------------------------------------------------------------------------------------------------
+mutation Update_Specialite_item {
+    update_Specialite_item(id: "7", data: { Praticiens: {id: "e5626ac3-3c8c-4093-a7d3-20105e8b0bdf"} }) {
+        Praticiens {
+            id
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+7. modifier le premier praticien créé pour le rattacher à une structure existante
+--------------------------------------------------------------------------------------------------------------------
+mutation Update_Praticien_item {
+    update_Praticien_item(
+        id: "e5626ac3-3c8c-4093-a7d3-20105e8b0bdf"
+        data: { structure_id: { id: "3444bdd2-8783-3aed-9a5e-4d298d2a2d7c" } }
+    ) {
+        id
+        structure_id {
+            id
+            nom
+            adresse
+            ville
+            code_postal
+            telephone
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------------------------------
+8. supprimer les deux dernier praticiens créés.
+--------------------------------------------------------------------------------------------------------------------
+mutation Delete_Praticien_items {
+    delete_Praticien_items(
+        ids: ["e5626ac3-3c8c-4093-a7d3-20105e8b0bdf", "faff517e-452c-4ead-8e6f-54ca13dd0ccd"]
+    ) {
+        ids
+    }
+}
